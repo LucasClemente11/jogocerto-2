@@ -14,7 +14,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         move_uploaded_file($_FILES['image']['tmp_name'], $image);
     }
 
-    $sql = "INSERT INTO championships (name, capacity, type, created_by, image) VALUES ('$name', '$capacity', '$type', '$created_by', '$image')";
+    // Inserir o campeonato no banco de dados, incluindo o método
+    $sql = "INSERT INTO championships (name, capacity, type, created_by, image, method) 
+            VALUES ('$name', '$capacity', '$type', '$created_by', '$image', '$type')";
     
     if (mysqli_query($conn, $sql)) {
         header('Location: index.php');
@@ -28,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <input type="text" name="name" placeholder="Nome do Campeonato" required>
     <input type="number" name="capacity" placeholder="Capacidade (número de times)" required>
     <select name="type">
-        <option value="matamata">Mata-mata</option>
+        <option value="mata-mata">Mata-mata</option>
         <option value="pontos_corridos">Pontos Corridos</option>
     </select>
     <input type="file" name="image">

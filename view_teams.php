@@ -54,10 +54,12 @@ $method = isset($championship['method']) ? ucfirst($championship['method']) : 'M
     $matches_exist = mysqli_num_rows($matches_result) > 0;
     ?>
 
-    <?php if (!$matches_exist) : ?>
-        <!-- Botão para iniciar o campeonato se ainda não tiver sido iniciado -->
-        <a href="start_championship.php?championship_id=<?php echo $championship_id; ?>" class="start-btn">Iniciar Campeonato</a>
-    <?php else : ?>
-        <p>Campeonato já iniciado.</p>
-    <?php endif; ?>
+<?php if (!$matches_exist) : ?>
+    <!-- Botão para iniciar o campeonato se ainda não tiver sido iniciado -->
+    <a href="start_championship.php?championship_id=<?php echo $championship_id; ?>" class="start-btn">Iniciar Campeonato</a>
+<?php else : ?>
+    <p>Campeonato já iniciado.</p>
+    <!-- Novo botão para ver o campeonato -->
+    <a href="view_championship.php?championship_id=<?php echo $championship_id; ?>" class="view-btn">Ver Campeonato</a>
+<?php endif; ?>
 </div>

@@ -9,10 +9,12 @@ $champ_sql = "SELECT * FROM championships WHERE id = '$championship_id'";
 $champ_result = mysqli_query($conn, $champ_sql);
 $championship = mysqli_fetch_assoc($champ_result);
 
-$method = $championship['method']; // 'mata-mata' ou 'pontos corridos'
-
 // Obter as partidas associadas ao campeonato
-$matches_sql = "SELECT * FROM matches WHERE championship_id = '$championship_id'";
+$matches_sql = "SELECT m.*, t1.name as team1_name, t2.name as team2_name 
+                FROM matches m
+                JOIN teams t1 ON m.team1_id = t1.id
+                JOIN teams t2 ON m.team2_id = t2.id
+                WHERE m.championship_id = '$championship_id'";
 $matches_result = mysqli_query($conn, $matches_sql);
 ?>
 
@@ -26,35 +28,38 @@ $matches_result = mysqli_query($conn, $matches_sql);
 
 <div class="main-content">
     <h2><?php echo $championship['name']; ?></h2>
-    <p>Capacidade: <?php echo $championship['capacity']; ?> times</p>
+    <p>Status: <?php echo ucfirst($championship['status']); ?></p>
     <p>Método: <?php echo ucfirst($championship['method']); ?></p>
 
     <h3>Partidas</h3>
     <table>
         <tr>
-            <th>Time 1</th>
-            <th>Time 2</th>
             <th>Rodada</th>
-            <th>Status</th>
+            <th>Time 1</th>
+            <th>Placar</th>
+            <th>Time 2</th>
+            <th>Ações</th>
         </tr>
         <?php while ($match = mysqli_fetch_assoc($matches_result)) : ?>
             <tr>
-                <td><?php echo getTeamName($match['team1_id']); ?></td>
-                <td><?php echo getTeamName($match['team2_id']); ?></td>
                 <td><?php echo $match['round']; ?></td>
-                <td><?php echo ucfirst($match['status']); ?></td>
+                <td><?php echo $match['team1_name']; ?></td>
+                <td>
+                    <?php 
+                    if (isset($match['score1']) && isset($match['score2'])) {
+                        echo $match['score1'] . ' - ' . $match['score2'];
+                    } else {
+                        echo 'Não jogado';
+                    }
+                    ?>
+                </td>
+                <td><?php echo $match['team2_name']; ?></td>
+                <td>
+                    <?php if (!isset($match['score1']) || !isset($match['score2'])) : ?>
+                        <a href="add_result.php?match_id=<?php echo $match['id']; ?>">Adicionar Resultado</a>
+                    <?php endif; ?>
+                </td>
             </tr>
         <?php endwhile; ?>
     </table>
 </div>
-
-<?php
-// Função para obter o nome do time a partir do ID
-function getTeamName($team_id) {
-    global $conn;
-    $sql = "SELECT name FROM teams WHERE id = '$team_id'";
-    $result = mysqli_query($conn, $sql);
-    $team = mysqli_fetch_assoc($result);
-    return $team['name'];
-}
-?>
