@@ -10,6 +10,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     header("Location: add_player_form.php?team_id=$team_id");
 }
 ?>
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
 
 <form method="POST">
     <label for="num_players">Quantos jogadores você deseja adicionar?</label>

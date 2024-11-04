@@ -20,6 +20,11 @@ if ($champ_result && mysqli_num_rows($champ_result) > 0) {
 $method = isset($championship['method']) ? ucfirst($championship['method']) : 'Método não definido';
 ?>
 
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
 <header>
     <div class="menu-btn" onclick="toggleMenu()">☰</div>
     <div class="logo">Logo</div>
