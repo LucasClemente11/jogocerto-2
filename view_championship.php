@@ -31,6 +31,9 @@ $stmt = mysqli_prepare($conn, $sql);
 mysqli_stmt_bind_param($stmt, "i", $championship_id);
 mysqli_stmt_execute($stmt);
 $matches = mysqli_stmt_get_result($stmt);
+
+// Definir uma constante para indicar que este arquivo está sendo incluído
+define('INCLUDED_FROM_CHAMPIONSHIP', true);
 ?>
 
 <!DOCTYPE html>
@@ -64,7 +67,7 @@ $matches = mysqli_stmt_get_result($stmt);
             <h1><?php echo htmlspecialchars($championship['name']); ?></h1>
             
             <div class="championship-info">
-                <p><strong>Tipo:</strong> <?php echo ucfirst($championship['type']); ?></p>
+                <p><strong>Método:</strong> <?php echo ucfirst($championship['method'] ?? 'Não definido'); ?></p>
                 <p><strong>Capacidade:</strong> <?php echo $championship['capacity']; ?> times</p>
                 <p><strong>Status:</strong> <?php echo ucfirst($championship['status']); ?></p>
             </div>
@@ -155,17 +158,7 @@ $matches = mysqli_stmt_get_result($stmt);
 
     <footer>
         <div class="container">
-            <p>&copy; <?php echo date('Y'); ?> Gerenciador de Campeonatos. Todos os direitos reservados.</p>
-        </div>
+            <p>&copy; <?php echo date('Y'); ?> Gerenciador de Campeonatos. Todos os direitos reservados.</p> </div>
     </footer>
-
-    <script>
-    function deleteTeam(id) {
-        if (confirm('Tem certeza que deseja remover este time do campeonato?')) {
-            window.location.href = 'delete_team.php?id=' + id;
-        }
-    }
-    </script>
-    <script src="js/script.js"></script>
 </body>
 </html>

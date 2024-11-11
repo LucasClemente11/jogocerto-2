@@ -8,8 +8,8 @@ check_login();
 $match_id = $_GET['match_id'] ?? 0;
 
 // Buscar informações da partida
-$sql = "SELECT m.*, c.id as championship_id, c.status as championship_status,
-        t1.name as team1_name, t2.name as team2_name
+$sql = "SELECT m.*, c.id as championship_id, c.status as championship_status, 
+        c.method as championship_method, t1.name as team1_name, t2.name as team2_name
         FROM matches m
         JOIN championships c ON m.championship_id = c.id
         JOIN teams t1 ON m.team1_id = t1.id
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         if (mysqli_stmt_execute($update_stmt)) {
             // Se for mata-mata, atualizar próxima fase
-            if ($championship['type'] == 'knockout') {
+            if ($match['championship_method'] == 'mata-mata') {
                 update_knockout_progression($match_id, $score1, $score2);
             }
             
@@ -121,6 +121,99 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </footer>
 
-    <script src="js/script.js"></script>
+    <style>
+        .add-result-section {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .match-details {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .match-details h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        .add-result-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .alert {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        .btn-primary:hover { background-color: #0056b3;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+    </style>
 </body>
 </html>

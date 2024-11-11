@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'db_connect.php';
+require_once 'functions.php';
 
 $championship_id = $_GET['championship_id'];
 

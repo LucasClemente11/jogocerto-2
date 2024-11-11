@@ -63,8 +63,8 @@ $championships = mysqli_stmt_get_result($stmt);
                         <div class="championship-info">
                             <h3><?php echo htmlspecialchars($championship['name']); ?></h3>
                             <p class="championship-type">
-                                <span class="label">Tipo:</span> 
-                                <?php echo ucfirst($championship['type']); ?>
+                                <span class="label">Método:</span> 
+                                <?php echo ucfirst($championship['method'] ?? 'Não definido'); ?>
                             </p>
                             <p class="team-count">
                                 <span class="label">Times:</span> 

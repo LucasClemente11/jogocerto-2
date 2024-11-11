@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['delete'])) {
         // Lógica para excluir o campeonato
         mysqli_begin_transaction($conn);
-        
+
         try {
             // 1. Primeiro, excluir todos os jogadores dos times do campeonato
             $delete_players = "DELETE players FROM players 
@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Se chegou até aqui sem erros, confirmar todas as alterações
             mysqli_commit($conn);
-            
+
             header('Location: index.php');
             exit;
         } catch (Exception $e) {
@@ -62,14 +62,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Lógica existente para atualizar o campeonato
         $name = sanitize_input($_POST['name']);
         $capacity = intval($_POST['capacity']);
-        $type = sanitize_input($_POST['type']);
+        $method = sanitize_input($_POST['method']); // Alterado de type para method
 
         // Verificar se foi enviada uma nova imagem
         if ($_FILES['image']['size'] > 0) {
             $target_dir = "uploads/";
             $target_file = $target_dir . basename($_FILES["image"]["name"]);
-            $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-            
+            $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
             // Permitir apenas certos formatos de arquivo
             $allowed_types = array("jpg", "jpeg", "png", "gif");
             if (in_array($imageFileType, $allowed_types)) {
@@ -81,10 +81,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $image = $championship['image'];
         }
 
-        $sql = "UPDATE championships SET name = ?, capacity = ?, type = ?, image = ? WHERE id = ?";
+        $sql = "UPDATE championships SET name = ?, capacity = ?, method = ?, image = ? WHERE id = ?";
         $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "sissi", $name, $capacity, $type, $image, $championship_id);
-        
+        mysqli_stmt_bind_param($stmt, "sissi", $name, $capacity, $method, $image, $championship_id);
+
         if (mysqli_stmt_execute($stmt)) {
             header('Location: view_championship.php?id=' . $championship_id);
             exit;
@@ -97,12 +97,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Campeonato</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
     <header>
         <div class="menu-btn" onclick="toggleMenu()">☰</div>
@@ -114,7 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="main-content">
         <h2>Editar Campeonato</h2>
-        
+
         <?php if (isset($error)) : ?>
             <p class="error"><?php echo $error; ?></p>
         <?php endif; ?>
@@ -131,10 +133,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <div class="form-group">
-                <label for="type">Tipo:</label>
-                <select id="type" name="type">
-                    <option value="mata-mata" <?php echo $championship['type'] == 'mata-mata' ? 'selected' : ''; ?>>Mata-mata</option>
-                    <option value="pontos_corridos" <?php echo $championship['type'] == 'pontos_corridos' ? 'selected' : ''; ?>>Pontos Corridos</option>
+                <label for="method">Método:</label>
+                <select id="method" name="method">
+                    <option value="mata-mata" <?php echo $championship['method'] == 'mata-mata' ? 'selected' : ''; ?>>Mata-mata</option>
+                    <option value="pontos_corridos" <?php echo $championship['method'] == 'pontos_corridos' ? 'selected' : ''; ?>>Pontos Corridos</option>
                 </select>
             </div>
 
@@ -158,12 +160,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .form-group {
             margin-bottom: 15px;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 5px;
         }
-        
+
         .form-group input,
         .form-group select {
             width: 100%;
@@ -171,25 +173,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-        
+
         .error {
             color: red;
             margin-bottom: 15px;
         }
-        
+
         button {
             background-color: #4CAF50;
             color: white;
-            padding:  10px 20px;
+            padding: 10px 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
         }
-        
+
         button:hover {
             background-color: #3e8e41;
         }
-        
+
         .btn-cancel {
             background-color: #aaa;
             color: white;
@@ -198,11 +200,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 4px;
             cursor: pointer;
         }
-        
+
         .btn-cancel:hover {
             background-color: #999;
         }
-        
+
         .btn-delete {
             background-color: #f44336;
             color: white;
@@ -211,7 +213,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 4px;
             cursor: pointer;
         }
-        
+
         .btn-delete:hover {
             background-color: #e53935;
         }
@@ -223,4 +225,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     </script>
 </body>
+
 </html>

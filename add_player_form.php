@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'db_connect.php';
+require_once 'functions.php';
 
 $team_id = $_GET['team_id'];
 $num_players = $_SESSION['num_players'];

@@ -7,6 +7,14 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+$capacity_options = [
+    '32' => '32 times - 16 avos finais',
+    '16' => '16 times - Oitavas',
+    '8'  => '8 times - Quartas',
+    '4'  => '4 times - Semifinais',
+    '2'  => '2 times - Final'
+];
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
     $capacity = $_POST['capacity'];
@@ -34,14 +42,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criar Campeonato</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
-
 <body>
     <header>
         <div class="menu-btn" onclick="toggleMenu()">☰</div>
@@ -67,8 +73,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="form-group">
                     <label for="capacity">Capacidade (número de times):</label>
-                    <input type="number" id="capacity" name="capacity" placeholder="Digite a quantidade de times"
-                        required>
+                    <select name="capacity" id="capacity" required>
+                        <option value="">Selecione a capacidade</option>
+                        <?php foreach ($capacity_options as $value => $label): ?>
+                            <option value="<?php echo $value; ?>"><?php echo $label; ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
 
                 <div class="form-group">
@@ -93,136 +103,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 
-    <style>
-        .main-content {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-        }
-
-        .form-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
-        .form-group input[type="file"] {
-            border: none;
-            padding: 0;
-        }
-
-        .error {
-            color: #f44336;
-            margin-bottom: 20px;
-            padding: 10px;
-            background-color: #ffebee;
-            border-radius: 4px;
-        }
-
-        .form-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .btn-primary {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .btn-primary:hover {
-            background-color: #45a049;
-        }
-
-        .btn-cancel {
-            background-color: #f44336;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
-        .btn-cancel:hover {
-            background-color: #da190b;
-        }
-
-        /* Estilo para o cabeçalho */
-        header {
-            background-color: #333;
-            color: white;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .menu-btn {
-            cursor: pointer;
-            font-size: 1.5rem;
-        }
-
-        .profile-btn a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.5rem;
-        }
-
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        /* Responsividade */
-        @media (max-width: 600px) {
-            .main-content {
-                padding: 10px;
-            }
-
-            .form-buttons {
-                flex-direction: column;
-            }
-
-            .btn-primary,
-            .btn-cancel {
-                width: 100%;
-                text-align: center;
-            }
-        }
-    </style>
-
     <script>
         function toggleMenu() {
             document.body.classList.toggle('menu-open');
         }
     </script>
 </body>
-
 </html>
